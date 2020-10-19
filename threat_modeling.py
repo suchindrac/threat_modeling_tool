@@ -1,7 +1,6 @@
 import tkinter as tk
 from tkinter import messagebox, filedialog
 from tkinter.scrolledtext import ScrolledText
-from PIL import ImageTk,Image 
 
 import os
 import objects
@@ -62,6 +61,21 @@ class ResizingCanvas(tk.Canvas):
         # Scale "all" objects to the window's scaling
         #
         self.scale("all", 0, 0, wscale, hscale)
+
+        self.create_grid(event)
+
+    def create_grid(self, event=None):
+        w = self.winfo_width() # Get current width of canvas
+        h = self.winfo_height() # Get current height of canvas
+        self.delete('grid_line') # Will only remove the grid_line
+
+        # Creates all vertical lines at intevals of 100
+        for i in range(0, w, 100):
+            self.create_line([(i, 0), (i, h)], tag='grid_line')
+
+        # Creates all horizontal lines at intevals of 100
+        for i in range(0, h, 100):
+            self.create_line([(0, i), (w, i)], tag='grid_line')
 
 class DummyEvent:
     def __init__(self):
