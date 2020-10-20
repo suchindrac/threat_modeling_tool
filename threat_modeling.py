@@ -132,27 +132,40 @@ class Window(tk.Frame):
     #
     # Returns the element closest to the pointer when an event is fired
     #
-    def get_closest_elem(self, event):
+    def get_closest_elems(self, event):
         x, y = self.event_to_canvas_coords(event)
-        elems = self.canvas.find_closest(x, y)
+        elems = self.canvas.find_overlapping(x - 10, y - 10, x + 10, y + 10)
 
-        if len(elems) != 0:
-            return elems[0]
-        else:
-            return None
+        return elems
 
     #
     # Returns the object closest to the pointer when an event is fired
     #
     def get_closest_obj(self, event):
         x, y = self.event_to_canvas_coords(event)
-        elems = self.canvas.find_closest(x, y)
-        if len(elems) != 0:
-            obj = self.elem_to_obj(elems[0])
-            return obj
-        else:
+        elems = self.canvas.find_overlapping(x - 10, y - 10, x + 10, y + 10)
+        
+        obj_dict = {}
+        for elem in elems:
+            obj = self.elem_to_obj(elem)
+            if obj == None:
+                continue
+            try:
+                obj_dict[obj] += 1
+            except:
+                obj_dict[obj] = 1
+        
+        if len(obj_dict.values()) == 0:
             return None
-
+            
+        max_val = max(obj_dict.values())
+        
+        for key in obj_dict.keys():
+            if obj_dict[key] == max_val:
+                return key
+        
+        return None
+        
     #
     # Converts the co-ordinates at which an event is fired, to the canvas co-ordinates
     #
@@ -295,10 +308,9 @@ class Window(tk.Frame):
     #
     def do_lc(self, event):
         self.event = event
+        self.elems_at_event = self.get_closest_elems(self.event)
         self.obj_at_event = self.get_closest_obj(self.event)
-        self.elem_at_event = self.get_closest_elem(self.event)
-        cur_elem_tags = self.canvas.itemcget(self.elem_at_event, "tags")
-
+        
         x, y = self.event_to_canvas_coords(event)
 
         self.move_start_x = x
@@ -335,45 +347,61 @@ class Window(tk.Frame):
         self.parent.bind("<Button-3>", self.do_rc)
         self.parent.bind("<Button-1>", self.do_lc)
         self.parent.bind("<B1-Motion>", self.move)
-        
+
     def mid_conn_to_obj(self, mid):
         for obj in self.objects:
             if mid in obj.mid_conns.keys():
                 return obj
         return None
-
+        
     def move(self, event):
         cur_x, cur_y = self.event_to_canvas_coords(event)
-
-        cur_elem_tags = self.canvas.itemcget(self.elem_at_event, "tags")
         
-        if "bnode" in cur_elem_tags:
+        if self.obj_at_event != None:
+            diff_x = cur_x - self.move_start_x
+            diff_y = cur_y - self.move_start_y
+            
+            self.move_start_x = cur_x
+            self.move_start_y = cur_y
+
+            for elem in self.obj_at_event.obj_ids:
+                self.canvas.move(elem, diff_x, diff_y)
+
+            objects.redraw_connectors(self.canvas, self.obj_at_event, 10)
+            return
+            
+        self.elems_at_event = [x for x in self.elems_at_event if "grid_line" not in self.canvas.itemcget(x, "tags")]
+        if len(self.elems_at_event) == 0:
+            return
+            
+        elem_is_bnode = False
+        
+        for elem in self.elems_at_event:
+            elem_tags = self.canvas.itemcget(elem, "tags")
+            if "bnode" in elem_tags:
+                elem_is_bnode = True
+                break
+                
+        if elem_is_bnode:
             cur_x, cur_y = self.event_to_canvas_coords(event)
-            self.canvas.coords(self.elem_at_event, cur_x - 5, cur_y - 5, cur_x + 5, cur_y + 5)
-            conn_obj = self.elem_to_obj(self.elem_at_event)
+            conn_obj = self.find_closest_obj(event)
             
             objects.redraw_boundary(self.canvas, conn_obj)
             return
             
-        if "mid_conn" in cur_elem_tags:
+        elem_is_mid_conn = False
+        for elem in self.elems_at_event:
+            elem_tags = self.canvas.itemcget(elem, "tags")
+            if "mid_conn" in elem_tags:
+                mid_conn_elem = elem
+                elem_is_mid_conn = True
+                break
+        
+        if elem_is_mid_conn:
             cur_x, cur_y = self.event_to_canvas_coords(event)
-            self.canvas.coords(self.elem_at_event, cur_x - 5, cur_y - 5, cur_x + 5, cur_y + 5)
-            conn_obj = self.mid_conn_to_obj(self.elem_at_event)
-            objects.redraw_connectors(self.canvas, conn_obj, 10, x3 = cur_x, y3 = cur_y, mid_conn = self.elem_at_event)
+            conn_obj = self.mid_conn_to_obj(mid_conn_elem)
+            objects.redraw_connectors(self.canvas, conn_obj, 10, x3 = cur_x, y3 = cur_y, mid_conn = mid_conn_elem)
             return
-
-        if not self.obj_at_event:
-            return
-        diff_x = cur_x - self.move_start_x
-        diff_y = cur_y - self.move_start_y
-            
-        self.move_start_x = cur_x
-        self.move_start_y = cur_y
-
-        for elem in self.obj_at_event.obj_ids:
-            self.canvas.move(elem, diff_x, diff_y)
-
-        objects.redraw_connectors(self.canvas, self.obj_at_event, 10)
     
     def move_stop(self, event):
         cur_x, cur_y = self.event_to_canvas_coords(event)

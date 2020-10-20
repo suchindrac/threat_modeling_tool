@@ -69,11 +69,7 @@ def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
         o1 = obj
         o2 = obj.mid_conns[mid_conn]
 
-        (a, b, c, d) = canvas.coords(mid_conn)
-        xm = (a + c) / 2
-        ym = (b + d) / 2
-
-        canvas.move(mid_conn, x3 - xm, y3 - ym)
+        canvas.coords(mid_conn, x3 - OVAL_SIZE, y3 - OVAL_SIZE, x3 + OVAL_SIZE, y3 + OVAL_SIZE)
 
         cline = find_connecting_line(o1, o2)
         
@@ -159,15 +155,15 @@ def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
 def create_connector(canvas, points, o1, o2, d):
     (xA, yA, xB, yB, xC, yC) = points
 
-    oval_a = canvas.create_oval(xA - 5, yA - 5, xA + 5, yA + 5, outline = "blue", fill = "blue", tag = "oval")
-    oval_b = canvas.create_oval(xB - 5, yB - 5, xB + 5, yB + 5, outline = "blue", fill = "blue", tag = "oval")
+    oval_a = canvas.create_oval(xA - OVAL_SIZE, yA - OVAL_SIZE, xA + OVAL_SIZE, yA + OVAL_SIZE, outline = "blue", fill = "blue", tag = "oval")
+    oval_b = canvas.create_oval(xB - OVAL_SIZE, yB - OVAL_SIZE, xB + OVAL_SIZE, yB + OVAL_SIZE, outline = "blue", fill = "blue", tag = "oval")
 
     if xC == None:
         xC = (xA + xB)/2 + d
     if yC == None:
         yC = (yA + yB)/2 - d
 
-    oval_c = canvas.create_oval(xC - 5, yC - 5, xC + 5, yC + 5, outline = "blue", fill = "blue", tag=["mid_conn", "oval"])
+    oval_c = canvas.create_oval(xC - OVAL_SIZE, yC - OVAL_SIZE, xC + OVAL_SIZE, yC + OVAL_SIZE, outline = "blue", fill = "blue", tag=["mid_conn", "oval"])
     line = canvas.create_line((xA, yA), (xC, yC), (xB, yB), smooth = True, arrow = tk.LAST, width = 2, arrowshape = (5, 10, 5),
                                         tag = "cline")
 
@@ -266,13 +262,13 @@ def add_boundary(canvas, obj):
 
     (xA, yA, xB, yB) = (obj.box_init_x, obj.box_init_y, obj.box_init_x + 100, obj.box_init_y + 100)
                                  
-    oval_a = canvas.create_oval(xA - 5, yA - 5, xA + 5, yA + 5, outline = "blue", fill = "blue", tag = ("oval", "bnode", "left"))
-    oval_b = canvas.create_oval(xB - 5, yB - 5, xB + 5, yB + 5, outline = "blue", fill = "blue", tag = ("oval", "bnode", "right"))
+    oval_a = canvas.create_oval(xA - OVAL_SIZE, yA - OVAL_SIZE, xA + OVAL_SIZE, yA + OVAL_SIZE, outline = "blue", fill = "blue", tag = ("oval", "bnode", "left"))
+    oval_b = canvas.create_oval(xB - OVAL_SIZE, yB - OVAL_SIZE, xB + OVAL_SIZE, yB + OVAL_SIZE, outline = "blue", fill = "blue", tag = ("oval", "bnode", "right"))
 
     xC = (xA + xB)/2 + d
     yC = (yA + yB)/2 - d
 
-    oval_c = canvas.create_oval(xC - 5, yC - 5, xC + 5, yC + 5, outline = "blue", fill = "blue", tag= ("oval", "bnode", "mid"))
+    oval_c = canvas.create_oval(xC - OVAL_SIZE, yC - OVAL_SIZE, xC + OVAL_SIZE, yC + OVAL_SIZE, outline = "blue", fill = "blue", tag= ("oval", "bnode", "mid"))
 
     obj.left = oval_a
     obj.right = oval_b
