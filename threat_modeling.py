@@ -53,10 +53,6 @@ class ResizingCanvas(tk.Canvas):
         self.config(width=self.width, height=self.height)
         self.update()
         
-        # self.image = self.image.resize((self.width, self.height), Image.ANTIALIAS)
-        # self.pimage = ImageTk.PhotoImage(self.image)
-        # self.create_image(0, 0, anchor=tk.NW, image=self.pimage, tag="image")
-    
         #
         # Scale "all" objects to the window's scaling
         #
@@ -142,8 +138,7 @@ class Window(tk.Frame):
     # Returns the object closest to the pointer when an event is fired
     #
     def get_closest_obj(self, event):
-        x, y = self.event_to_canvas_coords(event)
-        elems = self.canvas.find_overlapping(x - 10, y - 10, x + 10, y + 10)
+        elems = self.get_closest_elems(event)
         
         obj_dict = {}
         for elem in elems:
@@ -309,7 +304,22 @@ class Window(tk.Frame):
     def do_lc(self, event):
         self.event = event
         self.elems_at_event = self.get_closest_elems(self.event)
-        self.obj_at_event = self.get_closest_obj(self.event)
+        self.elems_at_event = [x for x in self.elems_at_event if "grid_line" not in self.canvas.itemcget(x, "tags")]
+        self.obj_at_event = self.get_closest_obj(event)
+        self.elem_is_bnode = False
+        self.elem_is_mid_conn = False
+
+        for elem in self.elems_at_event:
+            elem_tags = self.canvas.itemcget(elem, "tags")
+            
+            if "bnode" in elem_tags:
+                self.elem_is_bnode = True
+                self.bnode = elem
+                break
+            elif "mid_conn" in elem_tags:
+                self.elem_is_mid_conn = True
+                self.mid_conn_elem = elem
+                break
         
         x, y = self.event_to_canvas_coords(event)
 
@@ -355,7 +365,15 @@ class Window(tk.Frame):
         return None
         
     def move(self, event):
+        if len(self.elems_at_event) == 0:
+            return
+
         cur_x, cur_y = self.event_to_canvas_coords(event)
+
+        if self.elem_is_bnode:
+            conn_obj = self.elem_to_obj(self.bnode)
+            objects.redraw_boundary(self.canvas, conn_obj, self.bnode, cur_x, cur_y)
+            return
         
         if self.obj_at_event != None:
             diff_x = cur_x - self.move_start_x
@@ -369,40 +387,15 @@ class Window(tk.Frame):
 
             objects.redraw_connectors(self.canvas, self.obj_at_event, 10)
             return
-            
-        self.elems_at_event = [x for x in self.elems_at_event if "grid_line" not in self.canvas.itemcget(x, "tags")]
-        if len(self.elems_at_event) == 0:
-            return
-            
-        elem_is_bnode = False
         
-        for elem in self.elems_at_event:
-            elem_tags = self.canvas.itemcget(elem, "tags")
-            if "bnode" in elem_tags:
-                elem_is_bnode = True
-                break
-                
-        if elem_is_bnode:
+        if self.elem_is_mid_conn:
             cur_x, cur_y = self.event_to_canvas_coords(event)
-            conn_obj = self.find_closest_obj(event)
-            
-            objects.redraw_boundary(self.canvas, conn_obj)
+            conn_obj = self.mid_conn_to_obj(self.mid_conn_elem)
+            objects.redraw_connectors(self.canvas, conn_obj, 10, x3 = cur_x, y3 = cur_y, mid_conn = self.mid_conn_elem)
             return
-            
-        elem_is_mid_conn = False
-        for elem in self.elems_at_event:
-            elem_tags = self.canvas.itemcget(elem, "tags")
-            if "mid_conn" in elem_tags:
-                mid_conn_elem = elem
-                elem_is_mid_conn = True
-                break
         
-        if elem_is_mid_conn:
-            cur_x, cur_y = self.event_to_canvas_coords(event)
-            conn_obj = self.mid_conn_to_obj(mid_conn_elem)
-            objects.redraw_connectors(self.canvas, conn_obj, 10, x3 = cur_x, y3 = cur_y, mid_conn = mid_conn_elem)
-            return
-    
+        return
+        
     def move_stop(self, event):
         cur_x, cur_y = self.event_to_canvas_coords(event)
         self.move_stop_x = cur_x

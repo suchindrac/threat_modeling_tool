@@ -37,15 +37,14 @@ def find_connecting_line(o1, o2):
 
     return None
 
-def find_connected_obj_s(obj):
-    pass
-
-def redraw_boundary(canvas, obj):
+def redraw_boundary(canvas, obj, bnode, cur_x, cur_y):
     obj.obj_ids.remove(obj.box)
     obj.obj_ids.remove(obj.text)
     
     canvas.delete(obj.box)
     canvas.delete(obj.text)
+    
+    canvas.coords(bnode, cur_x - OVAL_SIZE, cur_y - OVAL_SIZE, cur_x + OVAL_SIZE, cur_y + OVAL_SIZE)
     
     (a, b, c, d) = canvas.coords(obj.left)
     xA = (a + c) / 2
