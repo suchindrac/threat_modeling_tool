@@ -16,20 +16,6 @@ class Object:
         self.starts = {}
         self.clines = {}
 
-def find_connected_obj_l(obj, line):
-    for o in obj.connected_to:
-        if o.clines[line] == obj:
-            return o
-
-    return None
-
-def find_connected_obj_m(obj, mid_conn):
-    for o in obj.connected_to:
-        if o.mid_conns[mid_conn] == obj:
-            return o
-
-    return None
-
 def find_connecting_line(o1, o2):
     for l in o1.clines.keys():
         if o1.clines[l] == o2:
@@ -40,12 +26,12 @@ def find_connecting_line(o1, o2):
 def redraw_boundary(canvas, obj, bnode, cur_x, cur_y):
     obj.obj_ids.remove(obj.box)
     obj.obj_ids.remove(obj.text)
-    
+
     canvas.delete(obj.box)
     canvas.delete(obj.text)
-    
+
     canvas.coords(bnode, cur_x - OVAL_SIZE, cur_y - OVAL_SIZE, cur_x + OVAL_SIZE, cur_y + OVAL_SIZE)
-    
+
     (a, b, c, d) = canvas.coords(obj.left)
     xA = (a + c) / 2
     yA = (b + d) / 2
@@ -55,14 +41,14 @@ def redraw_boundary(canvas, obj, bnode, cur_x, cur_y):
     (a, b, c, d) = canvas.coords(obj.mid)
     xC = (a + c) / 2
     yC = (b + d) / 2
-    
+
     obj.box = canvas.create_line((xA, yA), (xC, yC), (xB, yB), smooth = True, width = 2, tag = "line")
-    
+
     obj.text = canvas.create_text(xC + 50, yC + 50, text = obj.obj_name, tag = "text")
-    
+
     obj.obj_ids.append(obj.box)
     obj.obj_ids.append(obj.text)
-    
+
 def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
     if mid_conn != None:
         o1 = obj
@@ -71,12 +57,12 @@ def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
         canvas.coords(mid_conn, x3 - OVAL_SIZE, y3 - OVAL_SIZE, x3 + OVAL_SIZE, y3 + OVAL_SIZE)
 
         cline = find_connecting_line(o1, o2)
-        
+
         if o2.starts[o1]:
             obj = o1
             o1 = o2
             o2 = obj
-            
+
         canvas.delete(cline)
         del_key = o1.clines.pop(cline)
         del_key = o2.clines.pop(cline)
@@ -100,26 +86,18 @@ def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
 
         canvas.update()
         add_all_tag(canvas)
-        
+
         layer_objects(canvas)
 
         return
-
-    obj_sets = []
 
     for o in obj.connected_to:
         if o.starts[obj]:
             o1 = o
             o2 = obj
-            obj_sets.append((o1, o2))
         elif obj.starts[o]:
             o1 = obj
             o2 = o
-            obj_sets.append((o1, o2))
-
-    for oset in obj_sets:
-        o1 = oset[0]
-        o2 = oset[1]
 
         (a, b, c, d) = canvas.coords(o1.box)
         x1 = (a + c) / 2
@@ -189,7 +167,7 @@ def create_connector(canvas, points, o1, o2, d):
 
     layer_objects(canvas)
 
-    
+
 def layer_objects(canvas):
     try:
         canvas.tag_raise("rectangle", "oval")
@@ -198,9 +176,9 @@ def layer_objects(canvas):
         canvas.tag_raise("text", "all")
     except:
         pass
-        
+
     return
-        
+
 def add_all_tag(canvas):
     canvas.addtag_all("all")
 
@@ -209,58 +187,58 @@ def add_process(canvas, obj):
     obj.box_init_y = INIT_RECT_Y
     obj.box_init_width = INIT_RECT_WIDTH
     obj.box_init_height = INIT_RECT_HEIGHT
-    
+
     obj.text_init_x = obj.box_init_x + 75
     obj.text_init_y = obj.box_init_y + 25
 
-    obj.box = canvas.create_rectangle(obj.box_init_x, obj.box_init_y, 
-                        obj.box_init_width, obj.box_init_height, tag = "rectangle", 
+    obj.box = canvas.create_rectangle(obj.box_init_x, obj.box_init_y,
+                        obj.box_init_width, obj.box_init_height, tag = "rectangle",
                         fill = "yellow")
     obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text")
-    
+
     obj.obj_ids.append(obj.box)
     obj.obj_ids.append(obj.text)
-    
+
     canvas.update()
     add_all_tag(canvas)
-    
+
 def add_storage(canvas, obj):
     obj.box_init_x = INIT_CRC_X
     obj.box_init_y = INIT_CRC_Y
-    
+
     obj.box_init_r = INIT_CRC_RADIUS
     obj.box_init_width = (obj.box_init_x - obj.box_init_r) - (obj.box_init_x + obj.box_init_r)
     obj.box_init_width = (obj.box_init_y - obj.box_init_r) - (obj.box_init_y + obj.box_init_r)
-    
+
     obj.text_init_x = obj.box_init_x
     obj.text_init_y = obj.box_init_y
 
-    obj.box = canvas.create_oval(obj.box_init_x - obj.box_init_r, obj.box_init_y - obj.box_init_r, 
+    obj.box = canvas.create_oval(obj.box_init_x - obj.box_init_r, obj.box_init_y - obj.box_init_r,
                                                 obj.box_init_x + obj.box_init_r, obj.box_init_y + obj.box_init_r,
                                                 tag = "circle",
                                                 fill = "yellow")
-                                                
+
     obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text")
-    
+
     obj.obj_ids.append(obj.box)
     obj.obj_ids.append(obj.text)
-    
+
     canvas.update()
     add_all_tag(canvas)
-    
+
 def add_boundary(canvas, obj):
     obj.box_init_x = INIT_BDR_X
     obj.box_init_y = INIT_BDR_Y
     obj.box_init_width = INIT_BDR_WIDTH
     obj.box_init_height = INIT_BDR_HEIGHT
-    
+
     d = 10
-    
+
     obj.text_init_x = obj.box_init_x + 50
     obj.text_init_y = obj.box_init_y + 50
 
     (xA, yA, xB, yB) = (obj.box_init_x, obj.box_init_y, obj.box_init_x + 100, obj.box_init_y + 100)
-                                 
+
     oval_a = canvas.create_oval(xA - OVAL_SIZE, yA - OVAL_SIZE, xA + OVAL_SIZE, yA + OVAL_SIZE, outline = "blue", fill = "blue", tag = ("oval", "bnode", "left"))
     oval_b = canvas.create_oval(xB - OVAL_SIZE, yB - OVAL_SIZE, xB + OVAL_SIZE, yB + OVAL_SIZE, outline = "blue", fill = "blue", tag = ("oval", "bnode", "right"))
 
@@ -272,7 +250,7 @@ def add_boundary(canvas, obj):
     obj.left = oval_a
     obj.right = oval_b
     obj.mid = oval_c
-    
+
     obj.box = canvas.create_line((xA, yA), (xC, yC), (xB, yB), smooth = True, width = 2, tag = "line")
     obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text")
 
@@ -281,6 +259,6 @@ def add_boundary(canvas, obj):
     obj.obj_ids.append(oval_a)
     obj.obj_ids.append(oval_b)
     obj.obj_ids.append(oval_c)
-    
+
     canvas.update()
     add_all_tag(canvas)
