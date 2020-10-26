@@ -23,6 +23,13 @@ def find_connecting_line(o1, o2):
 
     return None
 
+def find_connecting_mid_conn(o1, o2):
+    for m in o1.mid_conns.keys():
+        if o1.mid_conns[m] == o2:
+            return m
+
+    return None
+
 def redraw_boundary(canvas, obj, bnode, cur_x, cur_y):
     obj.obj_ids.remove(obj.box)
     obj.obj_ids.remove(obj.text)
@@ -99,6 +106,8 @@ def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
             o1 = obj
             o2 = o
 
+        mid_conn = find_connecting_mid_conn(o1, o2)
+
         (a, b, c, d) = canvas.coords(o1.box)
         x1 = (a + c) / 2
         y1 = (b + d) / 2
@@ -122,6 +131,8 @@ def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
         cline = canvas.create_line(p1, p3, p2, smooth=True, arrow=tk.LAST, width=2, arrowshape=(5, 10, 5), tag = "cline")
         o1.clines[cline] = o2
         o2.clines[cline] = o1
+
+        canvas.coords(mid_conn, x3 - OVAL_SIZE, y3 - OVAL_SIZE, x3 + OVAL_SIZE, y3 + OVAL_SIZE)
 
     canvas.update()
     add_all_tag(canvas)
@@ -193,7 +204,7 @@ def add_process(canvas, obj):
 
     obj.box = canvas.create_rectangle(obj.box_init_x, obj.box_init_y,
                         obj.box_init_width, obj.box_init_height, tag = "rectangle",
-                        fill = "yellow")
+                        fill = "yellow", activefill='cyan')
     obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text")
 
     obj.obj_ids.append(obj.box)
@@ -215,7 +226,7 @@ def add_storage(canvas, obj):
 
     obj.box = canvas.create_oval(obj.box_init_x - obj.box_init_r, obj.box_init_y - obj.box_init_r,
                                                 obj.box_init_x + obj.box_init_r, obj.box_init_y + obj.box_init_r,
-                                                tag = "circle",
+                                                tag = "circle", activefill='cyan',
                                                 fill = "yellow")
 
     obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text")

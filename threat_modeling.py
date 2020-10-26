@@ -446,6 +446,8 @@ class Window(tk.Frame):
 
     def clear_canvas(self):
         self.canvas.delete("all")
+        self.canvas.create_grid()
+
         return
 
     def add_process(self):
