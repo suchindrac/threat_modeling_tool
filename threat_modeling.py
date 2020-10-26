@@ -28,12 +28,6 @@ class ResizingCanvas(tk.Canvas):
         self.height = self.winfo_reqheight()
         self.width = self.winfo_reqwidth()
 
-        # self.image = Image.open("gridlines.png")
-        # self.image = self.image.resize((self.width, self.height), Image.ANTIALIAS)
-        # self.pimage = ImageTk.PhotoImage(self.image)
-
-        # self.create_image(0, 0, anchor=tk.NW, image=self.pimage, tag="image")
-
     def on_resize(self, event):
         #
         # Setting scale values to: width or height at the time when resize event was called / width or height at the

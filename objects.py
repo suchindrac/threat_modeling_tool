@@ -56,7 +56,7 @@ def redraw_boundary(canvas, obj, bnode, cur_x, cur_y):
     obj.obj_ids.append(obj.box)
     obj.obj_ids.append(obj.text)
 
-def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
+def redraw_connectors(canvas, obj, dist, x3=None, y3=None, mid_conn=None):
     if mid_conn != None:
         o1 = obj
         o2 = obj.mid_conns[mid_conn]
@@ -116,8 +116,8 @@ def redraw_connectors(canvas, obj, d, x3=None, y3=None, mid_conn=None):
         x2 = (a + c) / 2
         y2 = (b + d) / 2
 
-        x3 = (x1 + x2) / 2 + d
-        y3 = (y1 + y2) / 2 + d
+        x3 = (x1 + x2) / 2 + dist
+        y3 = (y1 + y2) / 2 + dist
 
         p1 = (x1, y1)
         p3 = (x3, y3)
