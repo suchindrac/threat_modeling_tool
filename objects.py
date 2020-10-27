@@ -86,7 +86,7 @@ def redraw_connectors(canvas, obj, dist, x3=None, y3=None, mid_conn=None):
         p3 = (x3, y3)
         p2 = (x2, y2)
 
-        cline = canvas.create_line(p1, p3, p2, smooth=True, arrow=tk.LAST, width=2, arrowshape=(5, 10, 5), tag = "cline")
+        cline = canvas.create_line(p1, p3, p2, smooth = True, arrow=tk.LAST, width=2, arrowshape=(5, 10, 5), tag = "cline")
 
         o1.clines[cline] = o2
         o2.clines[cline] = o1

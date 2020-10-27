@@ -16,6 +16,8 @@ class ResizingCanvas(tk.Canvas):
         #
         tk.Canvas.__init__(self, parent, **kwargs)
 
+        self.parent = parent
+
         #
         # Window configure callback set to self.on_resize method
         #
@@ -160,7 +162,7 @@ class Window(tk.Frame):
     # Converts the co-ordinates at which an event is fired, to the canvas co-ordinates
     #
     def event_to_canvas_coords(self, event):
-        return (self.canvas.canvasx(event.x_root), self.canvas.canvasx(event.y_root))
+        return (self.canvas.canvasx(event.x), self.canvas.canvasx(event.y))
 
     #
     # Shows a message box
