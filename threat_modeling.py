@@ -150,10 +150,17 @@ class Window(tk.Frame):
         if len(obj_dict.values()) == 0:
             return None
 
-        min_val = min(obj_dict.values())
+        if all(e == list(obj_dict.values())[0] for e in list(obj_dict.values())):
+            st_objs = [x for x in list(obj_dict.keys()) if x.obj_type == "Storage"]
+            if len(st_objs) != 0:
+                return st_objs[0]
+            else:
+                return list(obj_dict.keys())[0]
+
+        max_val = max(list(obj_dict.values()))
 
         for key in obj_dict.keys():
-            if obj_dict[key] == min_val:
+            if obj_dict[key] == max_val:
                 return key
 
         return None

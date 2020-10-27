@@ -248,7 +248,7 @@ def add_boundary(canvas, obj):
     obj.text_init_x = obj.box_init_x + 50
     obj.text_init_y = obj.box_init_y + 50
 
-    (xA, yA, xB, yB) = (obj.box_init_x, obj.box_init_y, obj.box_init_x + 100, obj.box_init_y + 100)
+    (xA, yA, xB, yB) = (obj.box_init_x, obj.box_init_y, obj.box_init_x + INIT_BDR_LENGTH, obj.box_init_y + INIT_BDR_LENGTH)
 
     oval_a = canvas.create_oval(xA - OVAL_SIZE, yA - OVAL_SIZE, xA + OVAL_SIZE, yA + OVAL_SIZE, outline = "blue", fill = "blue", tag = ("oval", "bnode", "left"))
     oval_b = canvas.create_oval(xB - OVAL_SIZE, yB - OVAL_SIZE, xB + OVAL_SIZE, yB + OVAL_SIZE, outline = "blue", fill = "blue", tag = ("oval", "bnode", "right"))
