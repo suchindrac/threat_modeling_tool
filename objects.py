@@ -86,7 +86,7 @@ def redraw_connectors(canvas, obj, dist, x3=None, y3=None, mid_conn=None):
         p3 = (x3, y3)
         p2 = (x2, y2)
 
-        cline = canvas.create_line(p1, p3, p2, smooth = True, arrow=tk.LAST, width=2, arrowshape=(5, 10, 5), tag = "cline")
+        cline = canvas.create_line(p1, p3, p2, smooth = True, arrow=tk.LAST, width=4, arrowshape = CLINE_ARROW_SHAPE, tag = "cline", fill = CLINE_COLOR)
 
         o1.clines[cline] = o2
         o2.clines[cline] = o1
@@ -128,7 +128,7 @@ def redraw_connectors(canvas, obj, dist, x3=None, y3=None, mid_conn=None):
         del_key = o1.clines.pop(cline)
         del_key = o2.clines.pop(cline)
 
-        cline = canvas.create_line(p1, p3, p2, smooth=True, arrow=tk.LAST, width=2, arrowshape=(5, 10, 5), tag = "cline")
+        cline = canvas.create_line(p1, p3, p2, smooth=True, arrow=tk.LAST, width=4, tag = "cline", arrowshape = CLINE_ARROW_SHAPE, fill = CLINE_COLOR)
         o1.clines[cline] = o2
         o2.clines[cline] = o1
 
@@ -152,8 +152,8 @@ def create_connector(canvas, points, o1, o2, d):
         yC = (yA + yB)/2 - d
 
     oval_c = canvas.create_oval(xC - OVAL_SIZE, yC - OVAL_SIZE, xC + OVAL_SIZE, yC + OVAL_SIZE, outline = "blue", fill = "blue", tag=["mid_conn", "oval"])
-    line = canvas.create_line((xA, yA), (xC, yC), (xB, yB), smooth = True, arrow = tk.LAST, width = 2, arrowshape = (5, 10, 5),
-                                        tag = "cline")
+    line = canvas.create_line((xA, yA), (xC, yC), (xB, yB), smooth = True, arrow = tk.LAST, width = 4, arrowshape = CLINE_ARROW_SHAPE,
+                                        tag = "cline", fill = CLINE_COLOR)
 
     o1.obj_ids.append(oval_a)
     o2.obj_ids.append(oval_b)
@@ -205,7 +205,7 @@ def add_process(canvas, obj):
     obj.box = canvas.create_rectangle(obj.box_init_x, obj.box_init_y,
                         obj.box_init_width, obj.box_init_height, tag = "rectangle",
                         fill = "yellow", activefill='cyan')
-    obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text")
+    obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text", font = PROC_FONT, fill = PROC_TEXT_COLOR)
 
     obj.obj_ids.append(obj.box)
     obj.obj_ids.append(obj.text)
@@ -229,7 +229,7 @@ def add_storage(canvas, obj):
                                                 tag = "circle", activefill='cyan',
                                                 fill = "yellow")
 
-    obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text")
+    obj.text = canvas.create_text(obj.text_init_x, obj.text_init_y, text = obj.obj_name, tag = "text", font = STOR_FONT, fill = STOR_TEXT_COLOR)
 
     obj.obj_ids.append(obj.box)
     obj.obj_ids.append(obj.text)

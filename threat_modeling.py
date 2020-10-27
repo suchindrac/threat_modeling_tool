@@ -459,7 +459,7 @@ class Window(tk.Frame):
         self.objects.append(proc)
 
     def add_storage(self):
-        store = objects.Object("Storage", "New Storage Object", "New Storage Object Description")
+        store = objects.Object("Storage", "New Storage", "New Storage Object Description")
         objects.add_storage(self.canvas, store)
         self.objects.append(store)
 
