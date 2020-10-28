@@ -26,3 +26,5 @@ STOR_TEXT_COLOR = "cornflower blue"
 
 CLINE_COLOR = "khaki3"
 CLINE_ARROW_SHAPE = (8, 12, 15)
+
+GRID_LINE_COLOR = "SkyBlue3"

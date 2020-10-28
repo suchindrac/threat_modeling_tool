@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import messagebox, filedialog
+from tkinter import messagebox, filedialog, Scrollbar
 from tkinter.scrolledtext import ScrolledText
 
 import os
@@ -58,17 +58,20 @@ class ResizingCanvas(tk.Canvas):
         self.create_grid(event)
 
     def create_grid(self, event=None):
-        w = self.winfo_width() # Get current width of canvas
-        h = self.winfo_height() # Get current height of canvas
-        self.delete('grid_line') # Will only remove the grid_line
+        w = self.winfo_width()
+        h = self.winfo_height()
 
-        # Creates all vertical lines at intevals of 100
-        for i in range(0, w, 100):
-            self.create_line([(i, 0), (i, h)], tag='grid_line')
+        w = w + 10000
+        h = h + 10000
+        self.delete('grid_line')
 
-        # Creates all horizontal lines at intevals of 100
-        for i in range(0, h, 100):
-            self.create_line([(0, i), (w, i)], tag='grid_line')
+        # Draw vertical lines
+        for i in range(-10000, w, 20):
+            self.create_line([(i, -10000), (i, h)], tag='grid_line', fill = GRID_LINE_COLOR)
+
+        # Draw horizontal lines
+        for i in range(-10000, h, 20):
+            self.create_line([(-10000, i), (w, i)], tag='grid_line', fill = GRID_LINE_COLOR)
 
 class DummyEvent:
     def __init__(self):
@@ -106,6 +109,9 @@ class Window(tk.Frame):
         self.j_obj2 = None
         self.l1 = None
 
+        self.elems_at_event = None
+        self.obj_at_event = None
+
         #
         # Draw the initial window
         #
@@ -126,8 +132,14 @@ class Window(tk.Frame):
     # Returns the element closest to the pointer when an event is fired
     #
     def get_closest_elems(self, event):
-        x, y = self.event_to_canvas_coords(event)
-        elems = self.canvas.find_overlapping(x - 50, y - 50, x + 50, y + 50)
+        canvas = event.widget
+        try:
+            x = canvas.canvasx(event.x)
+            y = canvas.canvasy(event.y)
+
+            elems = self.canvas.find_overlapping(x - 50, y - 50, x + 50, y + 50)
+        except:
+            return None
 
         return elems
 
@@ -308,6 +320,10 @@ class Window(tk.Frame):
     def do_lc(self, event):
         self.event = event
         self.elems_at_event = self.get_closest_elems(self.event)
+
+        if self.elems_at_event == None:
+            return
+            
         self.elems_at_event = [x for x in self.elems_at_event if "grid_line" not in self.canvas.itemcget(x, "tags")]
 
         self.obj_at_event = self.get_closest_obj(event)
@@ -341,7 +357,14 @@ class Window(tk.Frame):
 
         self.canvas = ResizingCanvas(self.parent, width=self.cwidth, height=self.cheight, bg="white", highlightthickness=0)
 
-        self.canvas.pack()
+        self.hbar = Scrollbar(self.parent, orient = tk.HORIZONTAL)
+        self.hbar.pack(side = tk.BOTTOM, fill = tk.X)
+        self.hbar.config(command = self.canvas.xview)
+        self.vbar=Scrollbar(self.parent, orient = tk.VERTICAL)
+        self.vbar.pack(side = tk.RIGHT, fill = tk.Y)
+        self.vbar.config(command = self.canvas.yview)
+        self.canvas.config(xscrollcommand = self.hbar.set, yscrollcommand = self.vbar.set)
+        self.canvas.pack(side = tk.LEFT, expand = True, fill = tk.BOTH)
 
         self.menu_bar = tk.Menu(self.parent)
         self.parent.config(menu = self.menu_bar)
@@ -363,6 +386,7 @@ class Window(tk.Frame):
         self.parent.bind("<Button-1>", self.do_lc)
         self.parent.bind("<B1-Motion>", self.move)
 
+
     def mid_conn_to_obj(self, mid):
         for obj in self.objects:
             if mid in obj.mid_conns.keys():
@@ -370,6 +394,9 @@ class Window(tk.Frame):
         return None
 
     def move(self, event):
+        if self.elems_at_event == None:
+            return
+
         if len(self.elems_at_event) == 0:
             return
 
