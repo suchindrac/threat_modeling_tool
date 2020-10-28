@@ -323,7 +323,7 @@ class Window(tk.Frame):
 
         if self.elems_at_event == None:
             return
-            
+
         self.elems_at_event = [x for x in self.elems_at_event if "grid_line" not in self.canvas.itemcget(x, "tags")]
 
         self.obj_at_event = self.get_closest_obj(event)
@@ -400,11 +400,20 @@ class Window(tk.Frame):
         if len(self.elems_at_event) == 0:
             return
 
-        cur_x, cur_y = self.event_to_canvas_coords(event)
+        cur_x, cur_y = event.x, event.y
+
+        oval_x = oval_y = None
+        canvas = event.widget
+        try:
+            oval_x = canvas.canvasx(event.x)
+            oval_y = canvas.canvasy(event.y)
+
+        except:
+            return None
 
         if self.elem_is_bnode:
             conn_obj = self.elem_to_obj(self.bnode)
-            objects.redraw_boundary(self.canvas, conn_obj, self.bnode, cur_x, cur_y)
+            objects.redraw_boundary(self.canvas, conn_obj, self.bnode, oval_x, oval_y)
             return
 
         if self.obj_at_event != None:
@@ -422,7 +431,7 @@ class Window(tk.Frame):
 
         if self.elem_is_mid_conn:
             conn_obj = self.mid_conn_to_obj(self.mid_conn_elem)
-            objects.redraw_connectors(self.canvas, conn_obj, 10, x3 = cur_x, y3 = cur_y, mid_conn = self.mid_conn_elem)
+            objects.redraw_connectors(self.canvas, conn_obj, 10, x3 = oval_x, y3 = oval_y, mid_conn = self.mid_conn_elem)
             return
 
         return
