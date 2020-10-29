@@ -15,9 +15,11 @@ The following features are implemented:
 
 * Add processes
 * Add storage elements
+* Add boundaries
 * Move elements
 * Connect/join elements
 * Edit elements
+* Scroll canvas to add elements outside canvas view
 * Clear canvas
 
 TBD:
