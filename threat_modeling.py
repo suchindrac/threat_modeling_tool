@@ -229,7 +229,7 @@ class Window(tk.Frame):
         #
         # Configure the text of the text item in the object
         #
-        self.canvas.itemconfig(o.text, text= "%s..." % (o.obj_name[:16]))
+        self.canvas.itemconfig(o.text, text= "%s..." % (o.obj_name[:8]))
 
         #
         # Update canvas

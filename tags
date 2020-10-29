@@ -1,0 +1,73 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+CLINE_ARROW_SHAPE	constants.py	/^CLINE_ARROW_SHAPE = (8, 12, 15)$/;"	v
+CLINE_COLOR	constants.py	/^CLINE_COLOR = "khaki3"$/;"	v
+DummyEvent	threat_modeling.py	/^class DummyEvent:$/;"	c
+GRID_LINE_COLOR	constants.py	/^GRID_LINE_COLOR = "SkyBlue3"$/;"	v
+INIT_BDR_HEIGHT	constants.py	/^INIT_BDR_HEIGHT = None$/;"	v
+INIT_BDR_LENGTH	constants.py	/^INIT_BDR_LENGTH = 400$/;"	v
+INIT_BDR_WIDTH	constants.py	/^INIT_BDR_WIDTH = None$/;"	v
+INIT_BDR_X	constants.py	/^INIT_BDR_X = 50$/;"	v
+INIT_BDR_Y	constants.py	/^INIT_BDR_Y = 50$/;"	v
+INIT_CRC_RADIUS	constants.py	/^INIT_CRC_RADIUS = 70$/;"	v
+INIT_CRC_X	constants.py	/^INIT_CRC_X = 50$/;"	v
+INIT_CRC_Y	constants.py	/^INIT_CRC_Y = 50$/;"	v
+INIT_RECT_HEIGHT	constants.py	/^INIT_RECT_HEIGHT = 100$/;"	v
+INIT_RECT_WIDTH	constants.py	/^INIT_RECT_WIDTH = 200$/;"	v
+INIT_RECT_X	constants.py	/^INIT_RECT_X = 50$/;"	v
+INIT_RECT_Y	constants.py	/^INIT_RECT_Y = 50$/;"	v
+OVAL_SIZE	constants.py	/^OVAL_SIZE = 10$/;"	v
+Object	objects.py	/^class Object:$/;"	c
+PROC_FONT	constants.py	/^PROC_FONT = ('DejaVu Sans Mono', 14)$/;"	v
+PROC_FONT_B	constants.py	/^PROC_FONT_B = ('DejaVu Sans Mono', 14, "bold")$/;"	v
+PROC_TEXT_COLOR	constants.py	/^PROC_TEXT_COLOR = "cornflower blue"$/;"	v
+ResizingCanvas	threat_modeling.py	/^class ResizingCanvas(tk.Canvas):$/;"	c
+STOR_FONT	constants.py	/^STOR_FONT = ('DejaVu Sans Mono', 14)$/;"	v
+STOR_FONT_B	constants.py	/^STOR_FONT_B = ('DejaVu Sans Mono', 14, "bold")$/;"	v
+STOR_TEXT_COLOR	constants.py	/^STOR_TEXT_COLOR = "cornflower blue"$/;"	v
+Window	threat_modeling.py	/^class Window(tk.Frame):$/;"	c
+__init__	objects.py	/^    def __init__(self, obj_type, obj_name, obj_desc):$/;"	m	class:Object
+__init__	threat_modeling.py	/^    def __init__(self):$/;"	m	class:DummyEvent
+__init__	threat_modeling.py	/^    def __init__(self, parent = None):$/;"	m	class:Window
+__init__	threat_modeling.py	/^    def __init__(self, parent, **kwargs):$/;"	m	class:ResizingCanvas
+add_all_tag	objects.py	/^def add_all_tag(canvas):$/;"	f
+add_boundary	objects.py	/^def add_boundary(canvas, obj):$/;"	f
+add_boundary	threat_modeling.py	/^    def add_boundary(self):$/;"	m	class:Window
+add_process	objects.py	/^def add_process(canvas, obj):$/;"	f
+add_process	threat_modeling.py	/^    def add_process(self):$/;"	m	class:Window
+add_storage	objects.py	/^def add_storage(canvas, obj):$/;"	f
+add_storage	threat_modeling.py	/^    def add_storage(self):$/;"	m	class:Window
+app	threat_modeling.py	/^    app = Window(root)$/;"	v
+clear_canvas	threat_modeling.py	/^    def clear_canvas(self):$/;"	m	class:Window
+client_exit	threat_modeling.py	/^    def client_exit(self):$/;"	m	class:Window
+create_connector	objects.py	/^def create_connector(canvas, points, o1, o2, d):$/;"	f
+create_context_menu	threat_modeling.py	/^    def create_context_menu(self):$/;"	m	class:Window
+create_grid	threat_modeling.py	/^    def create_grid(self, event=None):$/;"	m	class:ResizingCanvas
+do_lc	threat_modeling.py	/^    def do_lc(self, event):$/;"	m	class:Window
+do_rc	threat_modeling.py	/^    def do_rc(self, event):$/;"	m	class:Window
+draw_edit_window	threat_modeling.py	/^    def draw_edit_window(self, o):$/;"	m	class:Window
+elem_to_obj	threat_modeling.py	/^    def elem_to_obj(self, elem):$/;"	m	class:Window
+event_to_canvas_coords	threat_modeling.py	/^    def event_to_canvas_coords(self, event):$/;"	m	class:Window
+find_connecting_line	objects.py	/^def find_connecting_line(o1, o2):$/;"	f
+find_connecting_mid_conn	objects.py	/^def find_connecting_mid_conn(o1, o2):$/;"	f
+get_closest_elems	threat_modeling.py	/^    def get_closest_elems(self, event):$/;"	m	class:Window
+get_closest_obj	threat_modeling.py	/^    def get_closest_obj(self, event):$/;"	m	class:Window
+init_window	threat_modeling.py	/^    def init_window(self):$/;"	m	class:Window
+join	threat_modeling.py	/^    def join(self):$/;"	m	class:Window
+layer_objects	objects.py	/^def layer_objects(canvas):$/;"	f
+mid_conn_to_obj	threat_modeling.py	/^    def mid_conn_to_obj(self, mid):$/;"	m	class:Window
+move	threat_modeling.py	/^    def move(self, event):$/;"	m	class:Window
+move_stop	threat_modeling.py	/^    def move_stop(self, event):$/;"	m	class:Window
+new_threat_model	threat_modeling.py	/^    def new_threat_model(self):$/;"	m	class:Window
+on_resize	threat_modeling.py	/^    def on_resize(self, event):$/;"	m	class:ResizingCanvas
+popup_quit_command	threat_modeling.py	/^    def popup_quit_command(self, e):$/;"	m	class:Window
+popup_save_command	threat_modeling.py	/^    def popup_save_command(self, o, e):$/;"	m	class:Window
+redraw_boundary	objects.py	/^def redraw_boundary(canvas, obj, bnode, cur_x, cur_y):$/;"	f
+redraw_connectors	objects.py	/^def redraw_connectors(canvas, obj, dist, x3=None, y3=None, mid_conn=None):$/;"	f
+root	threat_modeling.py	/^    root = tk.Tk()$/;"	v
+show	threat_modeling.py	/^    def show(self, what):$/;"	m	class:Window
+show_obj	threat_modeling.py	/^    def show_obj(self):$/;"	m	class:Window
