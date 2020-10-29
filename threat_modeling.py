@@ -473,13 +473,7 @@ class Window(tk.Frame):
 
     def create_context_menu(self):
         self.cmenu = tk.Menu(self.parent, tearoff = 0)
-        self.cmenu.add_command(label ="Cut")
-        self.cmenu.add_command(label ="Copy")
-        self.cmenu.add_command(label ="Paste")
-        self.cmenu.add_command(label ="Reload")
-        self.cmenu.add_separator()
-        self.cmenu.add_command(label ="Rename")
-        self.cmenu.add_command(label = "Info", command = self.show_obj)
+        self.cmenu.add_command(label = "Edit", command = self.show_obj)
         self.cmenu.add_command(label = "Join", command = self.join)
         self.cmenu.add_command(label = "Clear canvas", command = self.clear_canvas)
 
