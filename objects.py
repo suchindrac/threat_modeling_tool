@@ -243,7 +243,7 @@ def add_boundary(canvas, obj):
     obj.box_init_width = INIT_BDR_WIDTH
     obj.box_init_height = INIT_BDR_HEIGHT
 
-    d = 10
+    d = 5
 
     obj.text_init_x = obj.box_init_x + 50
     obj.text_init_y = obj.box_init_y + 50

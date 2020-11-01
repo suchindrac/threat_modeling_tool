@@ -386,7 +386,6 @@ class Window(tk.Frame):
         self.parent.bind("<Button-1>", self.do_lc)
         self.parent.bind("<B1-Motion>", self.move)
 
-
     def mid_conn_to_obj(self, mid):
         for obj in self.objects:
             if mid in obj.mid_conns.keys():
@@ -426,7 +425,7 @@ class Window(tk.Frame):
             for elem in self.obj_at_event.obj_ids:
                 self.canvas.move(elem, diff_x, diff_y)
 
-            objects.redraw_connectors(self.canvas, self.obj_at_event, 10)
+            objects.redraw_connectors(self.canvas, self.obj_at_event, 5)
             return
 
         if self.elem_is_mid_conn:
